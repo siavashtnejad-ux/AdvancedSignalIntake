@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="fa" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>افق اخلاقی - Biomedical Signal Intelligence</title>
+<link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+<div class="shell">
+  <aside class="sidebar">
+    <div class="brand"><span>EH</span><div><b>افق اخلاقی</b><small>Biomedical Signal Intelligence</small></div></div>
+    <nav>
+      <a href="#scan" class="active">⌕ پایش سیگنال</a>
+      <a href="#overview">◇ تحلیل سیگنال</a>
+      <a href="#evidence">◫ شواهد</a>
+      <a href="#history">↺ تاریخچه</a>
+    </nav>
+    <div class="method">
+      <strong>مدل تحلیل</strong>
+      <p>رشد شواهد، فعالیت بالینی، پیچیدگی اخلاقی، ارتباط با ایران و نوظهوری.</p>
+      <small>Signal Score یک شاخص اکتشافی نرم‌افزاری است و جایگزین قضاوت پژوهشگر نیست.</small>
+    </div>
+  </aside>
+
+  <main>
+    <section id="scan" class="hero-search">
+      <div class="hero-overlay"></div>
+
+      <div class="hero-content">
+        <div class="hero-heading">
+          <div>
+            <span class="eyebrow hero-eyebrow">HORIZON SCANNING PLATFORM</span>
+            <h1>هوشمندی سیگنال‌های زیست‌پزشکی</h1>
+            <p>
+              کشف و تحلیل روندهای نوظهور در علوم زیست‌پزشکی، فناوری سلامت و چالش‌های اخلاقی
+            </p>
+          </div>
+          <div id="health" class="health hero-health">در حال بررسی...</div>
+        </div>
+
+        <div class="hero-search-card">
+          <div class="hero-search-main">
+            <label class="query-field hero-query">
+              <span>موضوع یا عبارت جستجو</span>
+              <div class="query-input-wrap">
+                <span class="search-symbol">⌕</span>
+                <input id="query" dir="ltr" placeholder='مثال: "AI assisted cancer diagnosis"'>
+              </div>
+            </label>
+
+            <button id="runBtn" class="primary hero-run">اجرای پایش</button>
+          </div>
+
+          <div class="hero-options">
+            <label>از سال
+              <input id="fromYear" type="number" min="1900" max="2100">
+            </label>
+
+            <label>تا سال
+              <input id="toYear" type="number" min="1900" max="2100">
+            </label>
+
+            <label>حداکثر نتیجه از هر منبع
+              <select id="maxResults">
+                <option>10</option>
+                <option selected>25</option>
+                <option>50</option>
+                <option>100</option>
+              </select>
+            </label>
+
+            <label class="iran-check hero-iran">
+              <input id="iranFocus" type="checkbox">
+              <span>تمرکز جستجو بر ایران</span>
+            </label>
+          </div>
+
+          <div class="hero-sources">
+            <div class="source-title">منابع فعال</div>
+            <div id="sourceChecks" class="source-checks"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="overview" class="metric-grid">
+      <article><span>Signal Score</span><strong id="score">—</strong><small id="priority">—</small></article>
+      <article><span>شواهد یکتا</span><strong id="evidenceCount">—</strong><small>پس از حذف موارد تکراری</small></article>
+      <article><span>بلوغ فناوری</span><strong id="maturity">—</strong><small id="maturityScore">—</small></article>
+      <article><span>شدت اخلاقی</span><strong id="ethics">—</strong><small id="ethicsScore">—</small></article>
+      <article><span>ارتباط ایران</span><strong id="iran">—</strong><small id="iranScore">—</small></article>
+      <article><span>روند</span><strong id="trend">—</strong><small id="trendDetail">—</small></article>
+    </section>
+
+    <section class="panel">
+      <div class="section-head">
+        <div><span class="eyebrow">SIGNAL PROFILE</span><h2>نمایه تحلیل</h2></div>
+      </div>
+      <div class="bars">
+        <div><label>رشد شواهد <span id="barTrendText">—</span></label><i><b id="barTrend"></b></i></div>
+        <div><label>فعالیت بالینی <span id="barClinicalText">—</span></label><i><b id="barClinical"></b></i></div>
+        <div><label>پیچیدگی اخلاقی <span id="barEthicsText">—</span></label><i><b id="barEthics"></b></i></div>
+        <div><label>ارتباط با ایران <span id="barIranText">—</span></label><i><b id="barIran"></b></i></div>
+        <div><label>نوظهوری <span id="barNoveltyText">—</span></label><i><b id="barNovelty"></b></i></div>
+      </div>
+      <div class="analysis-grid">
+        <div><h3>حوزه‌های اخلاقی</h3><div id="ethicsDomains" class="tags"></div></div>
+        <div><h3>نشانه‌های بلوغ</h3><div id="maturityMarkers" class="tags"></div></div>
+        <div><h3>دلایل ارتباط ایران</h3><div id="iranReasons" class="tags"></div></div>
+        <div><h3>پوشش منابع</h3><div id="sourceCounts" class="tags"></div></div>
+      </div>
+      <div id="warnings" class="warnings" hidden></div>
+    </section>
+
+    <section id="evidence" class="panel">
+      <div class="section-head">
+        <div><span class="eyebrow">EVIDENCE EXPLORER</span><h2>شواهد بازیابی‌شده</h2></div>
+        <div class="actions">
+          <select id="evidenceSource"><option value="all">همه منابع</option></select>
+          <button id="jsonBtn" disabled>JSON</button>
+          <button id="csvBtn" disabled>CSV</button>
+          <button id="pdfBtn" disabled>PDF</button>
+        </div>
+      </div>
+      <div id="evidenceList" class="evidence-list"><div class="empty">هنوز پایشی انجام نشده است.</div></div>
+    </section>
+
+    <section id="history" class="panel">
+      <div class="section-head"><div><span class="eyebrow">SCAN HISTORY</span><h2>تاریخچه پایش</h2></div><button id="refreshHistory">به‌روزرسانی</button></div>
+      <div id="historyList" class="history-list"></div>
+    </section>
+  </main>
+</div>
+<script src="./app.js"></script>
+</body>
+</html>
