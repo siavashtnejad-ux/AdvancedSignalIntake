@@ -2,18 +2,31 @@ const $=id=>document.getElementById(id);
 let current=null;
 let sources=[];
 
+// Supports both root deployment (/) and reverse-proxy subpaths such as /signals/.
+const APP_BASE=(()=>{
+ const p=window.location.pathname;
+ if(p==="/"||p==="") return "";
+ if(p.endsWith("/")) return p.slice(0,-1);
+ const last=p.lastIndexOf("/");
+ return last>0?p.slice(0,last):"";
+})();
+function appUrl(path){
+ const p=String(path||"");
+ return APP_BASE+(p.startsWith("/")?p:"/"+p);
+}
+
 function fa(v){return String(v??"").replace(/\d/g,d=>"۰۱۲۳۴۵۶۷۸۹"[d])}
 function esc(s=""){return String(s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[c]))}
 
 async function api(url,opts={}){
- const r=await fetch(url,{headers:{"Content-Type":"application/json"},...opts});
+ const r=await fetch(appUrl(url),{headers:{"Content-Type":"application/json"},...opts});
  if(!r.ok){let d;try{d=await r.json()}catch{};throw new Error(d?.detail||`${r.status} ${r.statusText}`)}
  return r.json()
 }
 
 async function init(){
  try{
-  const h=await api("/api/health");$("health").textContent="● سامانه آماده";$("health").classList.add("ok");
+  await api("/api/health");$("health").textContent="● سامانه آماده";$("health").classList.add("ok");
   $("toYear").value=new Date().getFullYear();$("fromYear").value=new Date().getFullYear()-4;
   sources=await api("/api/sources");renderSources();
   await loadHistory();
@@ -96,7 +109,7 @@ function renderEvidence(){
 function enableExports(){
  for(const id of ["jsonBtn","csvBtn","pdfBtn"])$(id).disabled=false
 }
-function download(ext){if(current)location.href=`/api/export/${current.scan_id}.${ext}`}
+function download(ext){if(current)location.href=appUrl(`/api/export/${current.scan_id}.${ext}`)}
 async function loadHistory(){
  const rows=await api("/api/scans?limit=30"),box=$("historyList");box.innerHTML="";
  if(!rows.length){box.innerHTML='<div class="empty">هنوز اسکن ذخیره‌شده‌ای وجود ندارد.</div>';return}
