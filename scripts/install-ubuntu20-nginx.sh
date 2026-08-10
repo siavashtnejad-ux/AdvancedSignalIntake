@@ -3,7 +3,6 @@ set -euo pipefail
 
 APP_DIR=/opt/advanced-signal-intake
 REPO_URL=https://github.com/siavashtnejad-ux/AdvancedSignalIntake.git
-SERVICE_NAME=advanced-signal-intake
 
 if [ "${EUID}" -ne 0 ]; then
   echo "Run this script with sudo/root." >&2
@@ -11,7 +10,8 @@ if [ "${EUID}" -ne 0 ]; then
 fi
 
 apt-get update
-DEBIAN_FRONTEND=noninteractive apt-get install -y git python3 python3-venv python3-pip nginx curl
+DEBIAN_FRONTEND=noninteractive apt-get install -y git curl docker.io docker-compose
+systemctl enable --now docker
 
 if [ ! -d "$APP_DIR/.git" ]; then
   git clone "$REPO_URL" "$APP_DIR"
@@ -19,31 +19,33 @@ else
   git -C "$APP_DIR" pull --ff-only
 fi
 
-python3 -m venv "$APP_DIR/.venv"
-"$APP_DIR/.venv/bin/pip" install --upgrade pip wheel
-"$APP_DIR/.venv/bin/pip" install -r "$APP_DIR/requirements.txt"
+cd "$APP_DIR"
+mkdir -p data
 
-mkdir -p "$APP_DIR/data"
-chown -R www-data:www-data "$APP_DIR/data"
-chmod 750 "$APP_DIR/data"
-
-if [ ! -f /etc/advanced-signal-intake.env ]; then
-  cp "$APP_DIR/server/advanced-signal-intake.env.example" /etc/advanced-signal-intake.env
-  chmod 600 /etc/advanced-signal-intake.env
+if [ ! -f .env ]; then
+  cp server/advanced-signal-intake.env.example .env
+  chmod 600 .env
   echo
-  echo "Created /etc/advanced-signal-intake.env"
-  echo "Edit it before enabling external APIs that need contact info or keys."
+  echo "Created $APP_DIR/.env"
+  echo "Edit this file later to add NCBI_EMAIL, OPENALEX_API_KEY, and CROSSREF_MAILTO."
 fi
 
-cp "$APP_DIR/server/advanced-signal-intake.service" /etc/systemd/system/advanced-signal-intake.service
-systemctl daemon-reload
-systemctl enable --now advanced-signal-intake
+# Docker Compose v1 is available in Ubuntu 20.04 repositories.
+docker-compose -f docker-compose.ip.yml up -d --build
 
-sleep 2
-curl -fsS http://127.0.0.1:8081/api/health >/dev/null
+for i in $(seq 1 30); do
+  if curl -fsS http://127.0.0.1:8081/api/health >/dev/null 2>&1; then
+    echo
+    echo "AdvancedSignalIntake backend is healthy on 127.0.0.1:8081."
+    echo "Now add server/nginx-signals-location.conf INSIDE your existing Nginx server block."
+    echo "Then run: nginx -t && systemctl reload nginx"
+    echo "Public URL: http://85.198.17.18/signals/"
+    exit 0
+  fi
+  sleep 2
+done
 
-echo
-printf '%s\n' "Backend is healthy on 127.0.0.1:8081." 
-printf '%s\n' "Next: add server/nginx-signals-location.conf inside your EXISTING Nginx server block, then run:" 
-printf '%s\n' "  nginx -t && systemctl reload nginx"
-printf '%s\n' "Public URL will be: http://85.198.17.18/signals/"
+echo "Container started but health check did not succeed in time." >&2
+docker-compose -f docker-compose.ip.yml ps
+docker-compose -f docker-compose.ip.yml logs --tail=100 app
+exit 1
