@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>افق اخلاقی - Biomedical Signal Intelligence</title>
-<link rel="stylesheet" href="/styles.css">
+<link rel="stylesheet" href="./styles.css">
 </head>
 <body>
 <div class="shell">
@@ -26,15 +26,12 @@
   <main>
     <section id="scan" class="hero-search">
       <div class="hero-overlay"></div>
-
       <div class="hero-content">
         <div class="hero-heading">
           <div>
             <span class="eyebrow hero-eyebrow">HORIZON SCANNING PLATFORM</span>
             <h1>هوشمندی سیگنال‌های زیست‌پزشکی</h1>
-            <p>
-              کشف و تحلیل روندهای نوظهور در علوم زیست‌پزشکی، فناوری سلامت و چالش‌های اخلاقی
-            </p>
+            <p>کشف و تحلیل روندهای نوظهور در علوم زیست‌پزشکی، فناوری سلامت و چالش‌های اخلاقی</p>
           </div>
           <div id="health" class="health hero-health">در حال بررسی...</div>
         </div>
@@ -48,32 +45,16 @@
                 <input id="query" dir="ltr" placeholder='مثال: "AI assisted cancer diagnosis"'>
               </div>
             </label>
-
             <button id="runBtn" class="primary hero-run">اجرای پایش</button>
           </div>
 
           <div class="hero-options">
-            <label>از سال
-              <input id="fromYear" type="number" min="1900" max="2100">
-            </label>
-
-            <label>تا سال
-              <input id="toYear" type="number" min="1900" max="2100">
-            </label>
-
+            <label>از سال<input id="fromYear" type="number" min="1900" max="2100"></label>
+            <label>تا سال<input id="toYear" type="number" min="1900" max="2100"></label>
             <label>حداکثر نتیجه از هر منبع
-              <select id="maxResults">
-                <option>10</option>
-                <option selected>25</option>
-                <option>50</option>
-                <option>100</option>
-              </select>
+              <select id="maxResults"><option>10</option><option selected>25</option><option>50</option><option>100</option></select>
             </label>
-
-            <label class="iran-check hero-iran">
-              <input id="iranFocus" type="checkbox">
-              <span>تمرکز جستجو بر ایران</span>
-            </label>
+            <label class="iran-check hero-iran"><input id="iranFocus" type="checkbox"><span>تمرکز جستجو بر ایران</span></label>
           </div>
 
           <div class="hero-sources">
@@ -94,9 +75,7 @@
     </section>
 
     <section class="panel">
-      <div class="section-head">
-        <div><span class="eyebrow">SIGNAL PROFILE</span><h2>نمایه تحلیل</h2></div>
-      </div>
+      <div class="section-head"><div><span class="eyebrow">SIGNAL PROFILE</span><h2>نمایه تحلیل</h2></div></div>
       <div class="bars">
         <div><label>رشد شواهد <span id="barTrendText">—</span></label><i><b id="barTrend"></b></i></div>
         <div><label>فعالیت بالینی <span id="barClinicalText">—</span></label><i><b id="barClinical"></b></i></div>
@@ -118,9 +97,7 @@
         <div><span class="eyebrow">EVIDENCE EXPLORER</span><h2>شواهد بازیابی‌شده</h2></div>
         <div class="actions">
           <select id="evidenceSource"><option value="all">همه منابع</option></select>
-          <button id="jsonBtn" disabled>JSON</button>
-          <button id="csvBtn" disabled>CSV</button>
-          <button id="pdfBtn" disabled>PDF</button>
+          <button id="jsonBtn" disabled>JSON</button><button id="csvBtn" disabled>CSV</button><button id="pdfBtn" disabled>PDF</button>
         </div>
       </div>
       <div id="evidenceList" class="evidence-list"><div class="empty">هنوز پایشی انجام نشده است.</div></div>
@@ -132,6 +109,6 @@
     </section>
   </main>
 </div>
-<script src="/app.js"></script>
+<script src="./app.js"></script>
 </body>
 </html>
