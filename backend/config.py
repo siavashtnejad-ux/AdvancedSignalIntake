@@ -9,6 +9,7 @@ BASE_DIR = Path(__file__).resolve().parents[1]
 class Settings:
     app_name: str = "Ethical Horizon Intelligence v3"
     db_path: Path = Path(os.getenv("EH_DB_PATH", BASE_DIR / "data" / "ethical_horizon.db"))
+    root_path: str = os.getenv("EH_ROOT_PATH", "").rstrip("/")
     request_timeout: float = float(os.getenv("EH_REQUEST_TIMEOUT", "25"))
     ncbi_email: str = os.getenv("NCBI_EMAIL", "")
     ncbi_api_key: str = os.getenv("NCBI_API_KEY", "")
