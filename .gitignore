@@ -6,7 +6,9 @@ __pycache__/
 .env
 .env.*
 !.env.example
+!.env.production.example
 data/*.db
+backups/
 *.sqlite
 *.sqlite3
 .DS_Store
