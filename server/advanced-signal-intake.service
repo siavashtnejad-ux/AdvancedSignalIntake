@@ -1,0 +1,24 @@
+[Unit]
+Description=AdvancedSignalIntake FastAPI service
+After=network.target
+
+[Service]
+Type=simple
+User=www-data
+Group=www-data
+WorkingDirectory=/opt/advanced-signal-intake
+EnvironmentFile=/etc/advanced-signal-intake.env
+ExecStart=/opt/advanced-signal-intake/.venv/bin/uvicorn backend.main:app --host 127.0.0.1 --port 8081 --proxy-headers --forwarded-allow-ips=127.0.0.1
+Restart=always
+RestartSec=5
+TimeoutStopSec=20
+KillSignal=SIGINT
+
+# Basic hardening while retaining SQLite write access in /opt/advanced-signal-intake/data
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=full
+ReadWritePaths=/opt/advanced-signal-intake/data
+
+[Install]
+WantedBy=multi-user.target
